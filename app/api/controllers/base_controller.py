@@ -32,6 +32,7 @@ from app.api.services.user_notification_service import UserNotificationService
 
 from app.services.dishes_algorytm_service import PreparingDishes
 from app.config.logger_settings import get_logger
+from app.config.project_config import project_settings
 from app.api.services.personal_food_menu_service import PersonalFoodMenuService
 
 
@@ -307,7 +308,7 @@ async def reply(
                         await user_session.set_index_to_personal_food_recipes(index_to_recipe)
                         
                         personal_menu = await user_session.get_personal_food_menu()
-                        menu_text = await PreparingDishes.format_menu_text(personal_menu)
+                        menu_text = await PreparingDishes.format_menu_text(menu=personal_menu, language=project_settings.BOT_LANGUAGE)
                         await bot_menu_service.send_message(whatsapp_number, menu_text)
                         await asyncio.sleep(1)
 
@@ -388,7 +389,7 @@ async def reply(
                 case "3":
                     await user_session.set_state(UserStates.USER_WAITING_ANSWER)
                     personal_menu = await user_session.get_personal_food_menu()
-                    menu_text = await PreparingDishes.format_menu_text(personal_menu)
+                    menu_text = await PreparingDishes.format_menu_text(menu=personal_menu, language=project_settings.BOT_LANGUAGE)
                     await bot_menu_service.send_message(whatsapp_number, menu_text)
                     await asyncio.sleep(1.5)
                     await bot_menu_service.send_select_view_dish(whatsapp_number)
@@ -499,7 +500,11 @@ async def reply(
                     await asyncio.sleep(1.5)
 
                     # Prepare message with shopping list
-                    shopping_list_message = await PreparingDishes.prepare_message_with_shopping_list(shopping_list_result=shopping_list_result, divide_messages=True)
+                    shopping_list_message = await PreparingDishes.prepare_message_with_shopping_list(
+                        shopping_list_result=shopping_list_result,
+                        divide_messages=True,
+                        language=project_settings.BOT_LANGUAGE
+                    )
                     for message in shopping_list_message:
                         await bot_menu_service.send_message(whatsapp_number, message)
                         await asyncio.sleep(1.5)
@@ -557,9 +562,23 @@ async def reply(
                     logger.info(f"Indexes to personal food recipes: {indexes_to_personal_food_recipes}")
                     recipe_id = indexes_to_personal_food_recipes[index_recipe]
                     logger.info(f"Recipe id for view: {recipe_id}")
+                    personal_menu = await user_session.get_personal_food_menu()
+                    logger.info(f"Personal menu: {personal_menu}")
+
+                    dish_type = ""
+                    for category, recipes in personal_menu.items():
+                        if recipe_id in [recipe.id for recipe in recipes]:
+                            dish_type = category
+                            break
+
+                    logger.info(f"Catch dish type: {dish_type}")
                     recipe_object = await RecipesViewDataService().get_recipes_view_data_by_list_id(uow, [recipe_id])
                     recipe_object = recipe_object[0].model_dump()
-                    recipe_view = await rag_service.get_recipe_info_message(recipe_object)
+                    recipe_view = await rag_service.get_recipe_info_message(
+                        recipe=recipe_object,
+                        dish_type=dish_type,
+                        language=project_settings.BOT_LANGUAGE
+                    )
                     await bot_menu_service.send_message(whatsapp_number, recipe_view)
                     await asyncio.sleep(1.5)
                     await bot_menu_service.send_want_check_another_dish(whatsapp_number)

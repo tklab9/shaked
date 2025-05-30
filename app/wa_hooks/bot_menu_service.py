@@ -58,7 +58,7 @@ class BotMenuService:
         if self.language == 'en':
             await self.message_client.send_message(whatsapp_number, "Please try again or contact support.")
         else:
-            await self.message_client.send_message(whatsapp_number, "הכנס את מספר הלקוח שלך כדי להזין את זה במערכת.")
+            await self.message_client.send_message(whatsapp_number, "לא הצלחתי לזהות אותך כרגע אפשר לנסות שוב, או לפנות אלינו לתמיכה.")
 
     async def send_first_income_message(self, whatsapp_number: str, username: str):
         """
@@ -107,10 +107,10 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "*Great, lets Pick your diet:*\n\n"
-                "1️⃣ Vegetarian 🥕\n"
-                "2️⃣ Vegan 🌱\n"
-                "3️⃣ No preference\n\n"
+                "*מצוין! עכשיו נבחר את סוג התפריט: *\n\n"
+                "1️⃣ צמחוני 🥕\n"
+                "2️⃣ טבעוני 🌱\n"
+                "3️⃣ ללא העדפה\n\n"
             )
         await self.message_client.send_message(whastapp_number, menu_text)
     
@@ -129,10 +129,11 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "Oops! Please reply with *1*, *2*, or *3* to pick your diet:\n\n"
-                "1️⃣ Vegetarian 🥕\n"
-                "2️⃣ Vegan 🌱\n"
-                "3️⃣ No preference\n\n"
+                "לא התקבלה בחירה תקינה 🙁\n"
+                "נא לבחור את סוג התפריט על ידי הקלדת 1, 2 או 3\n\n"
+                "1️⃣ צמחוני 🥕\n"
+                "2️⃣ טבעוני 🌱\n"
+                "3️⃣ ללא העדפה\n\n"
             )
         await self.message_client.send_message(whastapp_number, menu_text)
     
@@ -150,10 +151,10 @@ class BotMenuService:
             )
         else:
             menu_text = (
-                f"*You selected {dietary_name}.\n"
-                f"This will build you a menu with only {dietary_name} dishes.*\n\n"
-                "1️⃣ Yes, I'm sure\n"
-                "2️⃣ I want to change\n"
+                f"*{dietary_name} נבחר תפריט*\n"
+                f"*בהתאם לכך, יורכב תפריט שיכלול רק מנות {dietary_name}.*\n\n"
+                "1️⃣ מאשר \n"
+                "2️⃣ רוצה לשנות\n"
             )
         await self.message_client.send_message(whastapp_number, menu_text)
 
@@ -173,10 +174,10 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "*We've prepared daily tips to help you succeed with your new food plan 📝*\n"
-                "*Would you like to receive one tip per day?*\n\n"
-                "1️⃣ Yes\n"
-                "2️⃣ No\n"
+                "*הכנתי סדרת טיפים קצרים שיעזרו בהתאמה לתפריט החדש 📝 *\n"
+                "*רוצה לקבל טיפים שיכולים לעזור לאורך הדרך?*\n\n"
+                "1️⃣ כן\n"
+                "2️⃣ לא\n"
             )
         await self.message_client.send_message(whastapp_number, menu_text)
 
@@ -190,10 +191,10 @@ class BotMenuService:
                 f"*Awesome! Your {dietary_name} menu is preparing...*\n\n"
             )
 
-        # Hebrew version
+        # Hebrew version "מתכונן"
         else:
             menu_text = (
-                f"*נוצר לך תפריט {dietary_name}...*\n\n"
+                f"*שלום! תפריט {dietary_name} מתכונן 🍽️*\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -215,14 +216,14 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "*Enjoy your IgG-friendly menu! *\n"
-                "*You can do things like review specific dish or create*\n"
-                "*shopping list everything is personalized based on your test results.*\n\n"
-                "1️⃣ View your IgG test results (PDF link) 📋\n"
-                "2️⃣ See red & orange list 🔎\n"
-                "3️⃣ Check your personal menu 📖\n"
-                "4️⃣ Shopping list 🛒\n"
-                "5️⃣ Feedback 💬\n\n"
+                "*התפריט האישי שלך מוכן לשימוש בהתאם לרגישויות שזוהו ✅*\n"
+                "*אפשר לבצע פעולות נוספות כמו צפייה במנה מסוימת או יצירת רשימת קניות.*\n"
+                "*נא לבחור פעולה:*\n\n"
+                "1️⃣ צפייה בתוצאות הבדיקה (PDF) 📋\n"
+                "2️⃣ הצגת רשימת הרגישויות (אדום וכתום) 🔎\n"
+                "3️⃣ צפייה בתפריט האישי 📖\n"
+                "4️⃣ יצירת רשימת קניות 🛒\n"
+                "5️⃣ השארת משוב 💬\n\n"
 
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
@@ -249,8 +250,8 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                f"*Based on your IgG food intolerance test results you are sensitive*\n"
-                f"*for the following foods: (red high sensitivity, orange moderate sensitivity)*\n\n"
+                f"*לפי תוצאות בדיקת הרגישות שלך, מצאתי שיש מזונות שכדאי להימנע מהם כרגע:*\n"
+                f"*(אדום מציין רגישות גבוהה, כתום מציין רגישות בינונית)*\n\n"
                 f"{high_sensitivity_info}\n\n"
                 f"{low_sensitivity_info}\n\n"
             )
@@ -273,10 +274,9 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "*Based on your food intolerance results, we’ll build your personal restaurant-style menu 🍽️*\n"
-                "*Your menu will include 27 dishes – a variety of starters, mains, and desserts – just like*\n"
-                "*having your own private chef 👨‍🍳*\n"
-                "Reply *1* when you're ready to begin!\n\n"
+                "*בהתבסס על תוצאות הרגישות שלך, הכנתי תפריט אישי בסגנון מסעדה 🍽️*\n"
+                "*התפריט כולל 27 מנות מגוונות – ראשונות, עיקריות וקינוחים – ממש כמו שיש שף פרטי 👨‍🍳\n"
+                "כדי להתחיל, יש להשיב עם 1.*\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -299,26 +299,27 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                "*💬 אנחנו שמחים לשמוע מה שברור לך!*\n"
-                "*אנא בחר את הנושא:*\n\n"
-                "1️⃣ צוות אוכל\n"
-                "2️⃣ צוות טכניקי\n"
-                "3️⃣ כללי\n\n"
-                "↩️ Type *0* to return to the main menu\n\n"
+                "*נשמח לשמוע מה חשבת! 💬*\n"
+                "*אפשר לבחור נושא למשוב:*\n\n"
+                "1️⃣ צוות התזונה\n"
+                "2️⃣ צוות התמיכה הטכנית\n"
+                "3️⃣ משוב כללי\n\n"
+                "↩️ הקלד *0* כדי לחזור לתפריט הראשי\n\n"
 
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
     
     async def send_after_support_message(self, whatsapp_number: str):
+        """
+        After support message V3 bot 'Msg2D5-1'
+        """
         if self.language == 'en':
             menu_text = (
-                "*🙏 Thank you for your feedback!*\n"
-                # "Type *0* to go back to the main menu.\n\n"
+                "*🙏 Thank you for your feedback!*\n\n"
             )
         else:
             menu_text = (
-                "*🙏 תודה על ההודעה שלך! צוות תמיכה שלנו יחזור אליך בהקדם האפשרי.*\n\n"
-                # "Type *0* to go back to the main menu.\n\n"
+                "*תודה על המשוב! 🙏*\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -337,13 +338,16 @@ class BotMenuService:
         # Hebrew language
         else:
             menu_text = (
-                "*👀 רוצה לראות תפריט ספציפי?*.\n"
-                "Type the dish number (e.g., *1* for <dish 01>)\n\n"
-                "↩️ Or type *0* to return to the main menu\n\n"
+                "*רוצה לצפות במנה מסוימת?  👀*\n"
+                "יש להזין את מספר המנה (לדוגמה: 1 עבור מנה מספר 1)\n\n"
+                "או הקלד *0* כדי לחזור לתפריט הראשי ↩️\n\n"
             )
         await self.message_client.send_message(whastapp_number, menu_text)
 
     async def send_want_check_another_dish(self, whatsapp_number: str):
+        """
+        Send want check another dish menu for V3 bot 'Msg2D3-1'
+        """
         if self.language == 'en':
             menu_text = (
                 "*🔁 Want to see another dish?*\n"
@@ -352,9 +356,9 @@ class BotMenuService:
             )
         else:
             menu_text = (
-                "*🔁 רוצה לראות תפריט אחר?*\n"
-                "Type the dish number (e.g., *1* for <dish 01>)\n\n"
-                "↩️ Or type *0* to return to the main menu\n\n"
+                "*רוצה לראות מנה נוספת?  🔁*\n"
+                "יש להזין את מספר המנה\n\n"
+                "או להקליד *0* כדי לחזור לתפריט הראשי\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -374,10 +378,10 @@ class BotMenuService:
         # Hebrew language
         else:
             menu_text = (
-                "*🛒 Let’s build your shopping list!*\n"
-                "Which dishes would you like to include?\n\n"
-                "Type the dish numbers (e.g., *1,3,5*)\n\n"
-                "↩️ Or type *0* to return to the main menu\n\n"
+                "*בוא נבנה רשימת קניות מותאמת!  🛒*\n"
+                "אפשר לבחור אילו מנות לכלול – ולקבל רשימת קניות מאוחדת.\n\n"
+                "יש להזין את מספרי המנות (לדוגמה: 1,3,5)\n\n"
+                "↩️ הקלד *0* כדי לחזור לתפריט הראשי\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -394,8 +398,8 @@ class BotMenuService:
         # Hebrew language
         else:
             menu_text = (
-                "*✅ Got it!*\n"
-                f"Here’s your shopping list for dishes: *{', '.join(map(str, shopping_list_id))}*\n"
+                "*מעולה! ✅*\n"
+                f"הנה רשימת הקניות המאוחדת עבור: *{', '.join(map(str, shopping_list_id))}*\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
 
@@ -448,12 +452,18 @@ class BotMenuService:
 
     async def send_asc_message_for_support(self, whatsapp_number: str):
         """
-        ASC message for support V3 bot 'Msg2D5-1'
+        ASC message for support V3 bot 'Msg2D5-0'
         """
-        menu_text = (
-            "*Please enter your feedback, we will review your message and get back with an answer:*\n"
-            "↩️ Type 0 to return to the main menu\n\n"
-        )
+        if self.language == 'en':
+            menu_text = (
+                "*Please enter your feedback, we will review your message and get back with an answer:*\n"
+                "↩️ Type *0* to return to the main menu\n\n"
+            )
+        else:
+            menu_text = (
+                "*הכנס את המשוב שלך, נחזור אליך עם תשובה:*\n"
+                "↩️ הקלד *0* כדי לחזור לתפריט הראשי\n\n"
+            )
         await self.message_client.send_message(whatsapp_number, menu_text)
     
     async def send_my_results_menu(self, whatsapp_number: str, result_link: str):
@@ -468,7 +478,7 @@ class BotMenuService:
         # Hebrew
         else:
             menu_text = (
-                f"Here is your test result PDF:\n{result_link}\n\n"
+                f"הנה תוצאות בדיקה שלך:\n{result_link}\n\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
     

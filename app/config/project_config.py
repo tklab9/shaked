@@ -24,5 +24,6 @@ class ProjectSettings(BaseSettings):
     GOOGLE_SERVICE_ACCOUNT: str = config("GOOGLE_SERVICE_ACCOUNT")
     GOOGLE_SPREADSHEET_ID: str = config("GOOGLE_SPREADSHEET_ID")
     BOT_LANGUAGE: str = config("BOT_LANGUAGE", default="en")
+    USER_CACHE_TTL: int = config("USER_CACHE_TTL", cast=int, default=600)
 
 project_settings = ProjectSettings()

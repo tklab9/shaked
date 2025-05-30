@@ -28,6 +28,13 @@ class PreparingDishes:
 
     CATEGORY_PRIORITY = ["Main Dishes", "Starters", "Salads & Sides", "Soups & Bowls", "Desserts & Snacks"]
     CATEGORY_ANSWER_ORDER = ["Starters", "Salads & Sides", "Main Dishes", "Soups & Bowls", "Desserts & Snacks"]
+    CATEGORY_HEBREW = {
+        "Starters": "מנות ראשונות",
+        "Salads & Sides": "תוספות וסלטים",
+        "Main Dishes": "מנות עיקריות",
+        "Soups & Bowls": "מרקים וקערות",
+        "Desserts & Snacks": "קינוחים ונשנושים",
+    }
     DESSERT_LIMIT = 5
     SIMILARITY_THRESHOLD = 0.7
 
@@ -140,29 +147,57 @@ class PreparingDishes:
         return menu
     
     @classmethod
-    async def format_menu_text(cls, menu: Dict[str, List[RecipeDTO]]) -> str:
-        LTR_MARK = "\u200E"
-        lines = ["🍽️ *Here’s your personal food menu:*", ""]
-        index = 1
+    async def format_menu_text(cls, menu: Dict[str, List[RecipeDTO]], language: str = 'he') -> str:
+        """
+        Format menu text for V3 bot 'Msg2C1'
+        """
 
-        for category in cls.CATEGORY_ANSWER_ORDER:
-            category_icon = cls.CATEGORY_IMAGES.get(category, "")
-            lines.append(f"*{category}* {category_icon}")
-            recipes = menu.get(category, [])
-            if not recipes:
-                lines.append(f"_{category} - didn't find any dishes based on your forbidden foods_")
-            else:
-                for recipe in recipes:
-                    lines.append(f"{LTR_MARK}{index}. {recipe.name} {category_icon}")
-                    index += 1
-            lines.append("")
+        if language == "en":
+            LTR_MARK = "\u200E"
+            lines = ["🍽️ *Here’s your personal food menu:*", ""]
+            index = 1
 
-        return "\n".join(lines)
+            for category in cls.CATEGORY_ANSWER_ORDER:
+                category_icon = cls.CATEGORY_IMAGES.get(category, "")
+                lines.append(f"*{category}* {category_icon}")
+                recipes = menu.get(category, [])
+                if not recipes:
+                    lines.append(f"_{category} - didn't find any dishes based on your forbidden foods_")
+                else:
+                    for recipe in recipes:
+                        lines.append(f"{LTR_MARK}{index}. {recipe.name} {category_icon}")
+                        index += 1
+                lines.append("")
+
+            return "\n".join(lines)
+        
+        else:
+            # Hebrew version
+            lines = ["🍽️ *הנה התפריט האישי שלך: 🍽*", ""]
+            index = 1
+
+            for category in cls.CATEGORY_ANSWER_ORDER:
+                category_icon = cls.CATEGORY_IMAGES.get(category, "")
+                lines.append(f"*{cls.CATEGORY_HEBREW.get(category, category)}* {category_icon}")
+                recipes = menu.get(category, [])
+                if not recipes:
+                    lines.append(f"_{cls.CATEGORY_HEBREW.get(category, category)} - לא מצאתי מנות מתאימות_")
+                else:
+                    for recipe in recipes:
+                        lines.append(f"{index}. {recipe.name} {category_icon}")
+                        index += 1
+                lines.append("")
+
+            return "\n".join(lines)
+
 
     @classmethod
-    async def prepare_message_with_shopping_list(cls, shopping_list_result: List[tuple[int, RecipeDTO]], divide_messages: bool = False) -> tuple[str]:
-        RTL_MARK = "\u200F"
-        message_header = "*🛒 Your combined shopping list:*\n"
+    async def prepare_message_with_shopping_list(cls, shopping_list_result: List[tuple[int, RecipeDTO]], divide_messages: bool = False, language: str = 'he') -> tuple[str]:
+        if language == "en":
+            message_header = "*🛒 Your combined shopping list:*\n"
+        else:
+            message_header = "*🛒 רשימת הקניות המשולבת שלך:*\n"
+
         combined_list = ""
 
         # Dictionary for combined ingredients
@@ -201,7 +236,10 @@ class PreparingDishes:
 
             # Find the most common unit of measurement
             most_common_unit = Counter(units).most_common(1)[0][0]
-            combined_list += f"{LTR_MARK}{name}: {LTR_MARK}{quantity} - {LTR_MARK}{most_common_unit}\n"
+            if language == "en":
+                combined_list += f"{LTR_MARK}{name}: {LTR_MARK}{quantity} - {LTR_MARK}{most_common_unit}\n"
+            else:
+                combined_list += f"{name}: {quantity} - {most_common_unit}\n"
 
         # Form the final message
         final_message = message_header + combined_list.strip()

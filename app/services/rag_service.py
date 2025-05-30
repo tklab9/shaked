@@ -112,13 +112,21 @@ class SaveRecipesEmbeddings(RagService):
 
 
 class AskRagForRecipe(RagService):
+    DISH_TYPES = {
+        "Starters": "מנות ראשונות",
+        "Salads & Sides": "תוספות וסלטים",
+        "Main Dishes": "מנות עיקריות",
+        "Soups & Bowls": "מרקים וקערות",
+        "Desserts & Snacks": "קינוחים ונשנושים",
+    }
+
     def __init__(self, openai_key: str, supabase_client: AsyncClient, csv_file_path: str):
         self._supabase_client = supabase_client
         self._csv_file_path = csv_file_path
         self._source_table = "recipes_view_data"
         super().__init__(openai_key)
     
-    async def get_recipe_info_message(self, recipe: dict) -> str:
+    async def get_recipe_info_message(self, recipe: dict, dish_type: str, language: str = 'he') -> str:
         """
         Prepare message for WhatsApp with recipe info
         """
@@ -133,17 +141,31 @@ class AskRagForRecipe(RagService):
         meal_type = clean_text(recipe.get('meal_type', '')).replace(';', ', ')
         minutes = recipe.get('minutes', '')
 
-        recipe_details = (
-            f"\n\n*🍽 Recipe structure:*\n"
-            f"*Name:* {name}\n"
-            f"*Sub title:* {sub_title}\n"
-            f"*Meal type:* {meal_type}\n"
-            f"*Minutes:* {minutes}\n"
-            f"*Preparation Method:*\n{preparation}\n"
-            f"*Ingredients:*\n{ingredients}\n"
-            f"*Nut recommend:*\n{nut_recommend}\n"
-            f"*Comment:*\n{comment}\n"
-        )
+        if language == "en":
+            recipe_details = (
+                # f"\n\n*🍽 Recipe structure:*\n"
+                f"*Name 🍽:* {name}\n"
+                # f"*Sub title:* {sub_title}\n"
+                f"*Dish type:* {dish_type}\n"
+                f"*Minutes:* {minutes}\n"
+                f"*Preparation Method:*\n{preparation}\n"
+                f"*Ingredients:*\n{ingredients}\n"
+                f"*Nut recommend:*\n{nut_recommend}\n"
+                f"*Comment:*\n{comment}\n"
+            )
+        
+        else:
+            recipe_details = (
+                # f"\n\n*🍽 Recipe structure:*\n"
+                f"*מתכון 🍽* {name}\n"
+                # f"*Sub title:* {sub_title}\n"
+                f"*סוג המנה* {self.DISH_TYPES.get(dish_type, dish_type)}\n"
+                f"*דקות* {minutes}\n"
+                f"*אופן הכנה*\n{preparation}\n"
+                f"*מרכיבים*\n{ingredients}\n"
+                f"*המלצת תזונאית*\n{nut_recommend}\n"
+                f"*המלצות כלליות*\n{comment}\n"
+            )
         return recipe_details
     
     async def _load_recipes_from_db(self, recipe_ids: list[int]) -> list[dict[str, str]]:

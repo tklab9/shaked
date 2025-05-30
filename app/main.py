@@ -70,7 +70,7 @@ def get_user_states() -> dict:
 def get_user_cache() -> dict:
     logger.info("Creating [UserCache]...")
     # user_cache = {}
-    user_cache = InMemoryUserCache()
+    user_cache = InMemoryUserCache(ttl=project_settings.USER_CACHE_TTL)
     return user_cache
 
 
