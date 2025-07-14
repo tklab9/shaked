@@ -74,8 +74,8 @@ class BotMenuService:
         # Hebrew version
         else:
             menu_text = (
-                f"*היי {username}, 👋, אני שבדק*\n"
-                "*ברוכים הבאים לassi̇טננטה הוראה אישית שלך.*\n"
+                f"*היי {username}, 👋, אני שקד*\n"
+                "* ברוכים הבאים לעוזר התזונאי הדיגיטלי שלך!*\n"
                 "*בוא נתחיל!*\n"
             )
         await self.message_client.send_message(whatsapp_number, menu_text)
